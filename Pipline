@@ -5,7 +5,6 @@ pipeline {
         stage('Checkout From SCM') {
             steps {
                 echo 'Checkout from SCM..'
-                checkout ...
             }
         }
         stage('Pre-build stg') {
@@ -15,7 +14,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-              sh 'docker build --target Build'
+              sh 'echo "docker build --target Build"'
             }
         }
         stage('Test') {
@@ -24,41 +23,29 @@ pipeline {
             }
         }
         stage('security') {
-            agent {
-                docker { image 'alpine:latest' }
-            }
             steps {
-                sh 'echo this is security'
+                sh 'echo "this is security"'
             }
         }
         stage('Back-end') {
-            agent {
-                docker { image 'maven:3.8.1-adoptopenjdk-11' }
-            }
             steps {
-                sh 'mvn --version'
+                sh 'echo "mvn --version"'
             }
         }
         stage('Front-end') {
-            agent {
-                docker { image 'node:16.13.1-alpine' }
-            }
             steps {
-                sh 'node --version'
+                sh 'echo "node --version"'
             }
         }
         stage('Deploy') {
-            agent {
-                docker { image 'aws-cli:latest' }
-            }
             steps {
-                sh 's3 cp src dst'
+                sh 'echo "s3 cp src dst"'
             }
         }
-      stage ('Post') {
-        echo "clear env"
-      }
-      
+        stage('Post') {
+            steps {
+                echo "clear env"
+            }
+        }
     }
 }
-
